@@ -216,6 +216,30 @@ def profile():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        if not request.form.get("username"):
+            flash("Must provide username")
+            return
+        new_user = User.query.filter_by(username=request.form.get("username")).first()
+        if new_user:
+            flash("Username is already taken")
+            return
+            # return apology("Username is already taken")
+        if not request.form.get("password") or not request.form.get("confirm"):
+            flash("Must provide password")
+            return
+        if request.form.get("password") != request.form.get("confirm"):
+            flash("Passwords don't match")
+            return
+        user = User(
+            name=request.form.get("name"),
+            email=request.form.get("email"),
+            username=request.form.get("username"),
+            password=generate_password_hash(request.form.get("password")),
+            created_at=datetime.now(),
+        )
+        db.session.add(user)
+        db.session.commit()
+        flash("Registered!")
         return redirect("/")
     return render_template("register.html")
 
