@@ -1,0 +1,43 @@
+{% extends "layout.html" %} {% block title %} Tasks {% endblock %} {% block
+content %}
+<form>
+  <select name="filter">
+    <option selected disabled>Filter by</option>
+    <option value="personal Deadline">Personal Deadline</option>
+    <option value="Deadline">Application Deadline</option>
+    <option value="created_at">Date Added</option>
+    <option value="Deadline">Deadline</option>
+  </select>
+  <select name="sort">
+    <option selected disabled>Sort by</option>
+    <option value="personal Deadline">Personal Deadline</option>
+    <option value="Deadline">Application Deadline</option>
+    <option value="created_at">Date Added</option>
+    <option value="Deadline">Deadline</option>
+  </select>
+  <input type="submit" value="View changes" />
+</form>
+<table class="table table-borderless">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Title</th>
+      <th>Description</th>
+      <!-- link/ contact info, result link -->
+    </tr>
+  </thead>
+  <tbody>
+    <!-- on click individual item route (/<>) -->
+    <tr>
+      <td>Done</td>
+      <td>Software Engineering Intern</td>
+      <td>Research</td>
+    </tr>
+    <tr>
+      <td>Done</td>
+      <td>Software Engineering Intern</td>
+      <td>Apply</td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

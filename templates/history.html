@@ -1,0 +1,43 @@
+{% extends "layout.html" %} {% block title %} History {% endblock %} {% block
+content %}
+<form>
+  <select name="filter">
+    <option selected disabled>Filter by</option>
+    <option value="personal Deadline">Personal Deadline</option>
+    <option value="Deadline">Application Deadline</option>
+    <option value="created_at">Date Added</option>
+    <option value="Deadline">Deadline</option>
+  </select>
+  <select name="sort">
+    <option selected disabled>Sort by</option>
+    <option value="personal Deadline">Personal Deadline</option>
+    <option value="Deadline">Application Deadline</option>
+    <option value="created_at">Date Added</option>
+    <option value="Deadline">Deadline</option>
+  </select>
+  <input type="submit" value="View changes" />
+</form>
+<table class="table" border="1">
+  <thead>
+    <tr>
+      <th>Application Date</th>
+      <th>Title</th>
+      <th>Organization Name</th>
+      <!-- link/ contact info, result link -->
+    </tr>
+  </thead>
+  <tbody>
+    <!-- on click individual item route (/<>) -->
+    <tr>
+      <td>02/ 09/ 23</td>
+      <td>Software Engineering Intern</td>
+      <td>Google</td>
+    </tr>
+    <tr>
+      <td>02/ 09/ 23</td>
+      <td>Software Engineering Intern</td>
+      <td>Google</td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

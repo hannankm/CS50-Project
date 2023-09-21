@@ -1,0 +1,59 @@
+{% extends "layout.html" %} {% block title %} Home {% endblock %} {% block
+content %}
+<div class="m-4">
+  <form action="/add" method="POST">
+    <select name="filter">
+      <option selected disabled>Filter by</option>
+      <option value="personal Deadline">Personal Deadline</option>
+      <option value="Deadline">Application Deadline</option>
+      <option value="created_at">Date Added</option>
+      <option value="Deadline">Deadline</option>
+    </select>
+    <select name="sort">
+      <option selected disabled>Sort by</option>
+      <option value="personal Deadline">Personal Deadline</option>
+      <option value="Deadline">Application Deadline</option>
+      <option value="created_at">Date Added</option>
+      <option value="Deadline">Deadline</option>
+    </select>
+    <input type="submit" value="View changes" />
+  </form>
+  <table class="table" border="1">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Title</th>
+        <th>Organization Name</th>
+        <th>Deadline</th>
+        <th>Category</th>
+        <th>Link</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- on click individual item route (/<>) -->
+      <tr>
+        <td href="/hi">Applied</td>
+        <td>Software Engineering Intern</td>
+        <td>Google</td>
+        <td>Jan 3, 2023</td>
+        <td>Internship</td>
+        <td>Link</td>
+        <td>Edit</td>
+        <td>Delete</td>
+      </tr>
+      <tr>
+        <td>Haven't Started</td>
+        <td>Women In Tech</td>
+        <td>Facebook</td>
+        <td>Sept 3, 2023</td>
+        <td>Scholarship & Grants</td>
+        <td>Link</td>
+        <td>Edit</td>
+        <td>Delete</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}

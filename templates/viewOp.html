@@ -1,0 +1,136 @@
+{% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
+content %}
+<nav></nav>
+<div class="m-4">
+    <h3>Software Engineering Intern</h4>
+    <!-- org name -->
+    <h5>Google</h3>
+    <!-- status -->
+    <div class="d-flex justify-content-between">
+      <p class="">Internship</p>
+    <!-- status -->
+    <p class="">Applied</p></div>
+    
+    <!-- stars based on priotity number -->
+    <p>⭐⭐⭐⭐</p>
+</div>
+<div class="m-4">
+  <h5>General Details</h3>
+  <table class="table w-50 table-hover table-bordered" border="1">
+    <tr>
+      <th>Application Deadline</td>
+      <td>02/03/2023</td>
+    </tr>
+    <tr>
+      <th>Personal Deadline</td>
+      <td>02/03/2023</td>
+    </tr>
+    <tr>
+      <th>Link</td>
+      <td>Software Engineering Intern</td>
+    </tr>
+    <tr>
+      <th>Location</td>
+      <td>Software Engineering Intern</td>
+    </tr>
+    <tr>
+      <th>Contact Info </td>
+      <td>Google</td>
+    </tr>
+    <tr>
+      <th>Created At</td>
+      <td>Software Engineering Intern</td>
+    </tr>
+  </table>
+</div>
+<div class="m-4">
+  <h5>Description</h3>
+  <p></p>
+</div>
+<div class="m-4">
+  <h5>Requirements</h3>
+  <p></p>
+</div>
+<div class="m-4">
+  <h5>Tasks</h3>
+    <!-- checked atrribute if item is done -->
+    <div class="form-check mb-3">
+      <label class="form-check-label">
+        <input class="form-check-input task" type="checkbox" name="remember"> Research
+      </label>
+      </div>
+      <div class="form-check mb-3">
+      <label class="form-check-label">
+        <input class="form-check-input task" type="checkbox" name="2"> Apply
+      </label>
+      </div>
+      <div class="form-check mb-3">
+      <label class="form-check-label">
+        <input class="form-check-input task" type="checkbox"  checked name="1"> Prepare docs
+      </label>
+      </div>
+      <div class="form-check mb-3">
+      <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" name="3"> Apply
+      </label>
+    </div>
+
+    <form action="/tasks" method="POST" class="w-25">
+      <div class="mb-3">
+        <!-- <label for="pwd" class="form-label">Password:</label> -->
+        <input type="text" class="form-control" id="pwd" placeholder="Description" name="pswd">
+      </div>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+
+</div>
+<div class="m-4">
+  <h5>Notes</h3>
+  <p></p>
+  <!-- modal -->
+  <button>Edit</button>
+</div><div class="m-4">
+  <h5>Other Info</h3>
+  <p></p>
+</div>
+<div class="m-4">
+  <!-- select material where op id == and user id  -->
+  <h3>Additional Materials</h3>
+  <ul>
+    <li>x</li>
+    <li>x</li>
+    <li>x</li>
+  </ul>
+    <!-- hidden feilds represneting id of user and op -->
+  <form action="/materials" method="POST" class="w-25">
+    <div class="mb-3 mt-3">
+      <!-- <label for="email" class="form-label">Email:</label> -->
+      <input type="text" class="form-control" id="email" placeholder="Title" name="email">
+    </div>
+    <div class="mb-3">
+      <!-- <label for="pwd" class="form-label">Password:</label> -->
+      <input type="file" class="form-control" id="pwd" placeholder="File" name="pswd">
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+  </form>
+</div>
+  <script>
+  const checkboxes = document.querySelectorAll('.task');
+
+  checkboxes.forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+      if (this.checked) {
+        // Checkbox is checked
+        myFunction(this.name);
+      } else {
+        // Checkbox is unchecked
+        // Perform other actions if needed
+      }
+    });
+  });
+  function myFunction(checkboxName) {
+    // Your function code here
+alert(checkboxName);   // Perform actions based on the checkbox value change
+  }
+  </script>
+{% endblock %}

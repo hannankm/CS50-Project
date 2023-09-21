@@ -1,0 +1,90 @@
+{% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
+content %}
+<!-- change password -->
+<nav></nav>
+<div>
+  <h3>Personal Details</h3>
+  <table class="table">
+    <tr>
+      <td>Name</td>
+      <td>Hanan Kedir</td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td>hanan@gmail.com</td>
+    </tr>
+    <tr>
+      <td>Username</td>
+      <td>hanana</td>
+    </tr>
+    <!-- <tr>
+      <td>Application Deadline</td>
+      <td>02/03/2023</td>
+    </tr> -->
+  </table>
+</div>
+<div>
+  <h3>Materials</h3>
+  <ul>
+    <li>x</li>
+    <li>x</li>
+    <li>x</li>
+  </ul>
+  <!-- hidden feilds represneting id of user and op empty-->
+  <form action="/materials" method="POST" class="w-25">
+    <div class="mb-3 mt-3">
+      <!-- <label for="email" class="form-label">Email:</label> -->
+      <input
+        type="text"
+        class="form-control"
+        id="email"
+        placeholder="Title"
+        name="email"
+      />
+    </div>
+    <div class="mb-3">
+      <!-- <label for="pwd" class="form-label">Password:</label> -->
+      <input
+        type="file"
+        class="form-control"
+        id="pwd"
+        placeholder="File"
+        name="pswd"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+  </form>
+</div>
+
+<div>
+  <h3>Links</h3>
+  <ul>
+    <li>x</li>
+    <li>x</li>
+    <li>x</li>
+  </ul>
+  <form action="/links" method="POST" class="w-25">
+    <div class="mb-3 mt-3">
+      <!-- <label for="email" class="form-label">Email:</label> -->
+      <input
+        type="text"
+        class="form-control"
+        id="email"
+        placeholder="Title"
+        name="email"
+      />
+    </div>
+    <div class="mb-3">
+      <!-- <label for="pwd" class="form-label">Password:</label> -->
+      <input
+        type="url"
+        class="form-control"
+        id="pwd"
+        placeholder="Link"
+        name="pswd"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+  </form>
+</div>
+{% endblock %}
