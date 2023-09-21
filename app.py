@@ -108,3 +108,133 @@ class Application_History(db.Model):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/add", methods=["GET", "POST"])
+@login_required
+def add():
+    if request.method == "POST":
+        # add to table op
+        redirect("/")
+    return render_template("addOp.html")
+
+
+@app.route("/calendar")
+@login_required
+def calendar():
+    # send the events as list of dictionaries
+    # title, startDate, color
+    return render_template("calendar.html")
+
+
+@app.route("/history")
+@login_required
+def history():
+    # send history
+    return render_template("history.html")
+
+
+@app.route("/links", methods=["POST"])
+@login_required
+def links():
+    # add link to table
+    return redirect("/")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Log user in"""
+
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            # return apology("must provide username", 403)
+            return redirect("/")
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            # return apology("must provide password", 403)
+            return redirect("/")
+
+        # Query database for username
+        user = User.query.filter_by(username=request.form.get("username")).first()
+
+        # Ensure username exists and password is correct
+        if not user or not check_password_hash(
+            user.password, request.form.get("password")
+        ):
+            return redirect("/")
+
+        # Remember which user has logged in
+        session["user_id"] = user.id
+
+        # Redirect user to home page
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("login.html")
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/login")
+
+
+@app.route("/materials", methods=["POST"])
+@login_required
+def materials():
+    # add material to table
+    return redirect("/")
+
+
+@app.route("/notes")
+@login_required
+def notes():
+    # send notes
+    return render_template("notes.html")
+
+
+@app.route("/profile")
+@login_required
+def profile():
+    # send current user's profile
+    return render_template("profile.html")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        return redirect("/")
+    return render_template("register.html")
+
+
+@app.route("/tasks", methods=["GET", "POST"])
+@login_required
+def tasks():
+    if request.method == "POST":
+        # add tasks to table
+        return redirect("/")
+    return render_template("tasks.html")
+
+
+# make this based on id
+@app.route("/view")
+@login_required
+def view():
+    # send the data corresponding to op: op, tasks, materials,
+    return render_template("viewOp.html")
+
+
+# task(POST), material(POST), op(GET, POST), user (GET, POST), link(POST), history(GET)
