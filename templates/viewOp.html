@@ -1,136 +1,445 @@
-{% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
+{% extends "layout.html" %} {% block title %} {{opp.title}} {% endblock %}
+{% block script %} 
+<script>
+  // Trim the value within the textarea element using JavaScript
+  function trimTextareaValue() {
+    var textarea = document.getElementById('comment');
+    textarea.value = textarea.value.replace(/^\s+|\s+$/g, '').replace(/\n{2,}/g, '\n');
+      }
+</script>
+<style>
+@media (min-width: 992px) {
+  .navbar.navbar-expand-lg {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+}
+</style>
+{% endblock %}
+{% block
 content %}
 <nav></nav>
-<div class="m-4">
-    <h3>Software Engineering Intern</h4>
+<div class="d-flex align-items-center">
+  <div class="m-4">
+    <h3>{{opp.title}}</h3>
     <!-- org name -->
-    <h5>Google</h3>
+    <h5>{{opp.org_name}}</h5>
     <!-- status -->
-    <div class="d-flex justify-content-between">
-      <p class="">Internship</p>
-    <!-- status -->
-    <p class="">Applied</p></div>
-    
-    <!-- stars based on priotity number -->
-    <p>⭐⭐⭐⭐</p>
-</div>
-<div class="m-4">
-  <h5>General Details</h3>
-  <table class="table w-50 table-hover table-bordered" border="1">
+    <div class="d-inline-flex">
+      <p class="bg-primary rounded-2 px-2">{{opp.category}}</p>
+      <!-- status -->
+      <p class="mx-4 bg-primary rounded-2 px-2">{{opp.status}}</p></div>
+      
+      <!-- stars based on priotity number -->
+      <p>{{"⭐" * opp.priority}}<p>
+    </div>
+    <div class="m-4">
+      <form action="/apply" method="POST">
+        <input type="text" hidden value="{{opp.id}}" name="opp_id"/>
+        {% if not applied %}
+        <button class="mt-6 btn-info btn-md" id="apply">Apply</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+  <nav class="navbar navbar-expand-lg bg-light justify-content-center sticky-top">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="#details">General Details</a></li>
+      <li class="nav-item"><a class="nav-link" href="#description">Description</a></li>
+      <li class="nav-item"><a class="nav-link" href="#tasks">Tasks</a></li>
+      <li class="nav-item"><a class="nav-link" href="#otherInfo">Other Info</a></li>
+      <li class="nav-item"><a class="nav-link" href="#materials">Materials and Links</a></li>
+
+
+    </ul>
+  </nav>
+<div class="mx-4 my-5" id="details">
+  <h4 class="my-2">General Details</h4>
+  <table class="table w-50 table-bordered">
     <tr>
       <th>Application Deadline</td>
-      <td>02/03/2023</td>
+      <td>{{opp.app_deadline}}</td>
     </tr>
     <tr>
       <th>Personal Deadline</td>
-      <td>02/03/2023</td>
+      <td>{{opp.personal_deadline}}</td>
     </tr>
     <tr>
       <th>Link</td>
-      <td>Software Engineering Intern</td>
+      <td><a href="{{opp.link}}" target="_blank">Link</a></td>
     </tr>
     <tr>
       <th>Location</td>
-      <td>Software Engineering Intern</td>
+      <td>{{opp.location}}</td>
     </tr>
     <tr>
       <th>Contact Info </td>
-      <td>Google</td>
+      <td>{{opp.contact_info}}</td>
     </tr>
     <tr>
       <th>Created At</td>
-      <td>Software Engineering Intern</td>
+      <td>{{opp.created_at}}</td>
     </tr>
   </table>
 </div>
-<div class="m-4">
-  <h5>Description</h3>
-  <p></p>
+<div class="m-4" id="description">
+  <h4>Description</h4>
+  <p>{{opp.short_description}}</p>
 </div>
 <div class="m-4">
-  <h5>Requirements</h3>
-  <p></p>
+  <h4>Requirements</h4>
+  <p>{{opp.requirements}}</p>
 </div>
-<div class="m-4">
-  <h5>Tasks</h3>
+<div class="m-4 tasks">
+  <h4>Tasks</h4>
+    {% for task in tasks %}
     <!-- checked atrribute if item is done -->
-    <div class="form-check mb-3">
-      <label class="form-check-label">
-        <input class="form-check-input task" type="checkbox" name="remember"> Research
-      </label>
-      </div>
+    <form action="/update_status" method="POST">
       <div class="form-check mb-3">
-      <label class="form-check-label">
-        <input class="form-check-input task" type="checkbox" name="2"> Apply
-      </label>
+        <label class="form-check-label">
+          <input class="form-check-input task" type="checkbox" value="true" name="status" {% if task.status == "Done" %} checked {% endif %}   onchange="this.form.submit()"> {{task.description}}
+        </label>
+        <input type="hidden" name="id" value="{{ task.id }}">
       </div>
-      <div class="form-check mb-3">
-      <label class="form-check-label">
-        <input class="form-check-input task" type="checkbox"  checked name="1"> Prepare docs
-      </label>
-      </div>
-      <div class="form-check mb-3">
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" name="3"> Apply
-      </label>
-    </div>
+    </form>
+    {% endfor %}
 
-    <form action="/tasks" method="POST" class="w-25">
+      
+
+    <form action="/add/task" method="POST" class="w-25">
+      <h5>Add task</h5>
       <div class="mb-3">
-        <!-- <label for="pwd" class="form-label">Password:</label> -->
-        <input type="text" class="form-control" id="pwd" placeholder="Description" name="pswd">
+        <label for="desc" class="form-label">Description:</label>
+        <input type="text" class="form-control" id="desc" placeholder="Description" name="desc">
+        <input type="number" class="form-control" id="id" placeholder="Description" name="id" value="{{opp.id}}" hidden>
       </div>
       <button type="submit" class="btn btn-primary">Add</button>
     </form>
 
 </div>
 <div class="m-4">
-  <h5>Notes</h3>
-  <p></p>
+  <h4>Notes</h4>
+  <p>{{opp.notes}}</p>
   <!-- modal -->
-  <button>Edit</button>
-</div><div class="m-4">
-  <h5>Other Info</h3>
+</div>
+<div class="m-4" id="otherInfo">
+  <h4>Other Info</h4>
+    {% set values = opp.other_info.split(',') %}
+    {% for value in values %}
+      {% set a, b = value.split(":") %}
+      {% set a = a.strip().capitalize() %}
+      {% set b = b.strip().capitalize() %}
+      <p><strong>{{a}}</strong> : {{b}}</p>
+    {% endfor %}
   <p></p>
 </div>
-<div class="m-4">
+<div class="m-4" id="materials">
   <!-- select material where op id == and user id  -->
-  <h3>Additional Materials</h3>
+  <h4>Additional Materials</h4>
   <ul>
-    <li>x</li>
-    <li>x</li>
-    <li>x</li>
+    {% for material in materials %}
+    <li>
+      <a
+        href="{{ url_for('static', filename=material.file) }}"
+        target="_black"
+        download
+        >{{material.title}}</a
+      >
+    </li><button>Delete</button>
+     {% endfor %}
   </ul>
     <!-- hidden feilds represneting id of user and op -->
-  <form action="/materials" method="POST" class="w-25">
+  <form action="/materials" method="POST" class="w-25"  enctype="multipart/form-data"
+  >
     <div class="mb-3 mt-3">
-      <!-- <label for="email" class="form-label">Email:</label> -->
-      <input type="text" class="form-control" id="email" placeholder="Title" name="email">
+      <label for="title" class="form-label">Title:</label>
+      <input type="text" class="form-control" id="title" placeholder="Title" name="title">
     </div>
     <div class="mb-3">
-      <!-- <label for="pwd" class="form-label">Password:</label> -->
-      <input type="file" class="form-control" id="pwd" placeholder="File" name="pswd">
+      <label for="file" class="form-label">File:</label>
+      <input type="file" class="form-control" id="file" placeholder="File" name="file">
     </div>
+    <input type="text" hidden value="{{opp.id}}" name="id" />
     <button type="submit" class="btn btn-primary">Add</button>
   </form>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit">
+    Edit
+  </button>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#delete">
+    Delete
+  </button>
 </div>
-  <script>
-  const checkboxes = document.querySelectorAll('.task');
 
-  checkboxes.forEach(function(checkbox) {
-    checkbox.addEventListener('change', function() {
-      if (this.checked) {
-        // Checkbox is checked
-        myFunction(this.name);
-      } else {
-        // Checkbox is unchecked
-        // Perform other actions if needed
-      }
-    });
-  });
-  function myFunction(checkboxName) {
-    // Your function code here
-alert(checkboxName);   // Perform actions based on the checkbox value change
-  }
-  </script>
+<div class="modal" id="edit">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Edit Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Heading</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Edit body -->
+      <div class="modal-body">
+        <form action="/op/edit/{{opp.id}}" method="POST">
+          <div class="mb-3 mt-3">
+            <label for="title" class="form-label">Title:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              placeholder="Enter title"
+              name="title"
+              value="{{opp.title}}"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="org_name" class="form-label">Organization Name:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="org_name"
+              placeholder="Enter Organization Name"
+              name="org_name"
+              value="{{opp.org_name}}"
+
+            />
+          </div>
+          <div class="mb-3">
+            <label for="link" class="form-label">Link:</label>
+            <input
+              type="url"
+              class="form-control"
+              id="link"
+              placeholder="Enter Link"
+              name="link"
+              value="{{opp.link}}"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <select
+              class="form-control"
+              id="category"
+              placeholder="Enter Category"
+              name="category"
+
+            >
+              <option disabled>Select</option>
+              <option {% if opp.status == 'Internship' %} selected {% endif %} value="Internship">Internship</option>
+              <option {% if opp.status == 'Job' %} selected {% endif %} value="Job">Job</option>
+              <option {% if opp.status == 'Scholarship/ Grant' %} selected {% endif %} value="Scholarship/ Grant">Scholarship/ Grant</option>
+              <option {% if opp.status == 'College/ Postgrad' %} selected {% endif %} value="College/ Postgrad">College/ Postgrad</option>
+              <option {% if opp.status == 'Skill Training' %} selected {% endif %} value="Skill Training">Skill Training</option>
+              <option {% if opp.status == 'Research/ Fellowship' %} selected {% endif %} value="Research/ Fellowship">Research/ Fellowship</option>
+              <option {% if opp.status == 'Other' %} selected {% endif %} value="Other">Other</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="status" class="form-label">Status:</label>
+            <select
+              class="form-control"
+              id="status"
+              placeholder="Enter status"
+              name="status"
+              value="{{opp.status}}"
+
+            >
+              <option disabled>Select</option>
+              <option {% if opp.status == 'Applied' %} selected {% endif %} value="Applied">Applied</option>
+              <option {% if opp.status == 'In progress' %} selected {% endif %} value="In progress">In progress</option>
+              <option {% if opp.status == "Haven't Started" %} selected {% endif %} value="Haven't Started">Haven't Started</option>
+              <option {% if opp.status == 'Not Opened' %} selected {% endif %} value="Not Opened">Not Opened</option>
+              <option {% if opp.status == 'Got Decision' %} selected {% endif %} value="Got Decision">Got Decision</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="app_deadline" class="form-label">Application Deadline:</label>
+            <input
+              type="date"
+              class="form-control"
+              id="app_deadline"
+              placeholder="Application Deadline:"
+              name="app_deadline"
+              value="{{opp.app_deadline}}"
+
+            />
+          </div>
+      
+          <div class="mb-3">
+            <label for="personal_deadline" class="form-label"
+              >Personal Deadline:</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="personal_deadline"
+              placeholder="Enter Personal Deadline"
+              name="personal_deadline"
+              value="{{opp.personal_deadline}}"
+
+            />
+          </div>
+      
+          <div class="mb-3">
+            <label for="short_description" class="form-label"
+              >Short Description:</label
+            >
+            <textarea
+              class="form-control"
+              rows="3"
+              id="short_description"
+              name="short_description"
+
+            >{{opp.short_description}}</textarea>
+          </div>
+          <div class="mb-3">
+            <label for="requirements" class="form-label">Requirements:</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              id="requirements"
+              name="requirements"
+
+            >{{opp.requirements}}</textarea>
+          </div>
+      
+          <div class="mb-3">
+            <label for="tasks" class="form-label"
+              >Tasks: (comma separated Example: research, prepare docs, apply)</label
+            >
+            {% set value = [] %}
+            {% for task in tasks %}
+              {% set _ = value.append(task.description|trim) %}
+            {% endfor %}
+            
+            {% set tasks_value = value|join(", ")|trim%}
+            <textarea
+              class="form-control"
+              rows="3"
+              id="edit_tasks"
+              name="tasks"
+              oninput="trimTextareaValue()"
+            >
+            {{tasks_value}}</textarea>
+            <!-- tasks is array so  -->
+          </div>
+          <div class="mb-3">
+            <label for="priority" class="form-label">Priority Rating: 1 - 5</label>
+            <input
+              min="1"
+              max="5"
+              type="number"
+              class="form-control"
+              id="priority"
+              placeholder="Enter priority (1 being lowest, 5 being highest)"
+              name="priority"
+              value="{{opp.priority}}"
+
+            />
+          </div>
+      
+          <div class="mb-3">
+            <label for="contact_info" class="form-label">Contact Information:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="contact_info"
+              placeholder="Enter Contact Information"
+              name="contact_info"
+              value="{{opp.contact_info}}"
+
+            />
+          </div>
+          <div class="mb-3">
+            <label for="location" class="form-label">Location: </label>
+            <input
+              type="text"
+              class="form-control"
+              id="location"
+              placeholder="Enter location"
+              name="location"
+              value="{{opp.location}}"
+
+            />
+          </div>
+          <div class="mb-3">
+            <label for="notes" class="form-label">Notes:</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              id="notes"
+              name="notes"
+
+            >{{opp.notes}}</textarea>
+          </div>
+          <div class="mb-3">
+            <label for="other_info" class="form-label"
+              >Other info: (comma separated as key: value pairs Example: payment: 30$
+              per hour, duration: 3 months)</label
+            >
+            <textarea
+              class="form-control"
+              rows="3"
+              id="other_info"
+              name="other_info"
+
+            >{{opp.other_info}}</textarea>
+          </div>
+          <div class="d-flex mx-auto">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+
+
+      <!-- Edit footer -->
+      <div class="modal-footer">
+        <div class="d-flex mx-auto">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal" id="delete">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Delete Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Heading</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Delete body -->
+      <div class="modal-body">
+        <h5>Are you sure you want to delete this item? </h5>
+
+        <p>Note, this action cannot be undone.</p>
+        <form
+        action="/op/{{opp.id}}/delete"
+        method="POST"
+        class="w-25"
+      >
+      </div>
+
+      <!-- Delete footer -->
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Delete</button>
+      </form>
+
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+  
 {% endblock %}

@@ -1,24 +1,53 @@
 {% extends "layout.html" %} {% block title %} Home {% endblock %} {% block
-content %}
+script%}
+
+<script>
+  function redirectToOpportunity(oppId) {
+    window.location.href = "/view/" + oppId;
+  }
+</script>
+{% endblock %} {% block content %}
 <div class="m-4">
-  <form action="/add" method="POST">
-    <select name="filter">
-      <option selected disabled>Filter by</option>
-      <option value="personal Deadline">Personal Deadline</option>
-      <option value="Deadline">Application Deadline</option>
-      <option value="created_at">Date Added</option>
-      <option value="Deadline">Deadline</option>
-    </select>
-    <select name="sort">
-      <option selected disabled>Sort by</option>
-      <option value="personal Deadline">Personal Deadline</option>
-      <option value="Deadline">Application Deadline</option>
-      <option value="created_at">Date Added</option>
-      <option value="Deadline">Deadline</option>
-    </select>
-    <input type="submit" value="View changes" />
-  </form>
-  <table class="table" border="1">
+  <div class="row">
+    <div class="col-lg-2 col-3">
+      <form action="/" method="POST">
+        <select name="status" class="form-control mr-1">
+          <option selected disabled>Filter by Status</option>
+          <option value="all">Display All</option>
+          <option value="Applied">Applied</option>
+          <option value="In progress">In progress</option>
+          <option value="Haven't Started">Haven't Started</option>
+          <option value="Not Opened">Not Opened</option>
+          <option value="Got Decision">Got Decision</option>
+        </select>
+      </div>
+      <div class="col-lg-2 col-3">
+        <select name="category" class="form-control mr-1">
+          <option selected disabled>Filter by Category</option>
+          <option value="all">Display All</option>
+          <option value="Internship">Internship</option>
+          <option value="Job">Job</option>
+          <option value="Scholarship/ Grant">Scholarship/ Grant</option>
+          <option value="College/ Postgrad">College/ Postgrad</option>
+          <option value="Skill Training">Skill Training</option>
+          <option value="Research/ Fellowship">Research/ Fellowship</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="col-lg-2 col-3">
+        <select name="sort" class="form-control mr-1">
+          <option selected disabled>Sort by</option>
+          <option value="personal Deadline">Personal Deadline</option>
+          <option value="app_deadline">Application Deadline</option>
+          <option value="created_at">Date Added</option>
+        </select>
+      </div>
+      <div class="col-lg-2 col-3">
+        <input class="btn btn-info" type="submit" value="Refresh" />
+      </form>
+    </div>
+  </div>
+  <table class="table table-hover table-bordered">
     <thead>
       <tr>
         <th>Status</th>
@@ -27,32 +56,34 @@ content %}
         <th>Deadline</th>
         <th>Category</th>
         <th>Link</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <!-- <th>Edit</th>
+        <th>Delete</th> -->
       </tr>
     </thead>
     <tbody>
       <!-- on click individual item route (/<>) -->
+      {% for opp in opps %}
       <tr>
-        <td href="/hi">Applied</td>
-        <td>Software Engineering Intern</td>
-        <td>Google</td>
-        <td>Jan 3, 2023</td>
-        <td>Internship</td>
-        <td>Link</td>
-        <td>Edit</td>
-        <td>Delete</td>
+        <td class="clickable" onclick="redirectToOpportunity('{{ opp.id }}')">
+          {{opp.status}}
+        </td>
+        <td class="clickable" onclick="redirectToOpportunity('{{ opp.id }}')">
+          {{opp.title}}
+        </td>
+        <td class="clickable" onclick="redirectToOpportunity('{{ opp.id }}')">
+          {{opp.org_name}}
+        </td>
+        <td class="clickable" onclick="redirectToOpportunity('{{ opp.id }}')">
+          {{opp.app_deadline}}
+        </td>
+        <td class="clickable" onclick="redirectToOpportunity('{{ opp.id }}')">
+          {{opp.category}}
+        </td>
+        <td><a href="{{opp.link}}" target="_blank">Link</a></td>
+        <!-- <td>Edit</td>
+        <td>Delete</td> -->
       </tr>
-      <tr>
-        <td>Haven't Started</td>
-        <td>Women In Tech</td>
-        <td>Facebook</td>
-        <td>Sept 3, 2023</td>
-        <td>Scholarship & Grants</td>
-        <td>Link</td>
-        <td>Edit</td>
-        <td>Delete</td>
-      </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>

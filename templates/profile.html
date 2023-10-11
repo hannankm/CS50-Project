@@ -1,90 +1,373 @@
-{% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
+{% extends "layout.html" %} {% block title %} Profile {% endblock %} 
+{% block script %}
+
+{% endblock %}
+{% block
 content %}
 <!-- change password -->
 <nav></nav>
-<div>
-  <h3>Personal Details</h3>
-  <table class="table">
+<div class="mx-4 my-5">
+  <div class="d-inline-flex mb-2"><h3>Personal Details</h3><button class="btn btn-info mx-5" data-bs-toggle="modal" data-bs-target="#edit">Edit</button></div>
+  <table class="table table-borderless">
     <tr>
-      <td>Name</td>
-      <td>Hanan Kedir</td>
+      <td><strong>Name</strong></td>
+      <td>{{user.name}}</td>
     </tr>
     <tr>
-      <td>Email</td>
-      <td>hanan@gmail.com</td>
+      <td><strong>Email</strong></td>
+      <td>{{user.email}}</td>
     </tr>
     <tr>
-      <td>Username</td>
-      <td>hanana</td>
+      <td><strong>Username</strong></td>
+      <td>{{user.username}}</td>
     </tr>
     <!-- <tr>
       <td>Application Deadline</td>
       <td>02/03/2023</td>
     </tr> -->
   </table>
+  
 </div>
-<div>
-  <h3>Materials</h3>
-  <ul>
-    <li>x</li>
-    <li>x</li>
-    <li>x</li>
-  </ul>
+<div class="mx-4 my-5">
   <!-- hidden feilds represneting id of user and op empty-->
-  <form action="/materials" method="POST" class="w-25">
+  <div class="row">
+    <div class="col-lg-6 col-12">
+      <h3>Materials</h3>
+      <ul>
+        {% for material in materials %}
+        <!-- iframe, embedd, [image, video, pdf] -->
+        <li class="d-flex align-items-center">
+          <a
+            href="{{ url_for('static', filename=material.file) }}"
+            target="_black"
+            download
+            class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover align-self-center"
+            >{{material.title}}</a
+          >
+          <button type="button" class="border border-0 bg-transparent mx-1 fs-6 text-body-secondary " data-item-id="{{ material.id }}" data-bs-toggle="modal" data-bs-target="#editmaterial">
+            <img src="static/edit.png" style="width: 20px; height: 20px;">
+        </button>
+          <form action="/material/{{material.id}}/delete" method="POST" class="align-self-center">
+            <input type="text" hidden value="{{material.id}}"/>
+            <button type="submit" class="border border-0 bg-transparent mx-1 fs-6 text-body-secondary align-self-center"  >
+              <img src="static/close.png" style="width: 12px; height: 12px;">
+            </button> 
+          </form>
+       </li>
+        {% endfor %}
+      </ul>
+        <form
+        action="/materials"
+        method="POST"
+        enctype="multipart/form-data"
+        class="w-75"
+      >
+        <div class="mb-3 mt-3">
+          <label for="file_title" class="form-label">Title:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="file_title"
+            placeholder="Title"
+            name="title"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="file" class="form-label">File:</label>
+          <input
+            type="file"
+            class="form-control"
+            id="file"
+            placeholder="File"
+            name="file"
+          />
+          <input type="text" hidden value="" name="id" />
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+    </div>
+    <div class="col-lg-6 col-12">
+      <h3>Links</h3>
+      <ul>
+        {% for link in links %}
+        <li class="d-flex align-items-center">
+          <a href="{{link.link}}" target="_blank"
+          class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover align-self-center"
+          >{{link.title}}
+            </a
+          >
+
+          <button type="button" class="border border-0 bg-transparent mx-1 fs-6 text-body-secondary align-self-center"  data-bs-toggle="modal" data-bs-target="#editlink" data-item-id="{{ link.id }}">
+            Edit
+          </button>      <form action="/link/{{link.id}}/delete" method="POST">
+            <input type="text" hidden value="{{link.id}}"/>
+            <button type="submit" class="border border-0 bg-transparent mx-1 fs-6 text-body-secondary align-self-center" >
+              Delete
+            </button> 
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      <form action="/links" method="POST" class="w-75">
+        <div class="mb-3 mt-3">
+          <label for="email" class="form-label">Title:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            placeholder="Title"
+            name="title"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="link" class="form-label">Link:</label>
+          <input
+            type="url"
+            class="form-control"
+            id="link"
+            placeholder="Link"
+            name="link"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+    </div>
+    </div>
+
+  </div>
+</div>
+<!-- Material -->
+<div class="modal" id="editmaterial">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Edit Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Material</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Edit body -->
+      <div class="modal-body">
+        <form
+    action="/material/edit"
+    method="POST"
+    enctype="multipart/form-data"
+    class="w-75"
+  >
     <div class="mb-3 mt-3">
-      <!-- <label for="email" class="form-label">Email:</label> -->
+      <label for="edit_file_title" class="form-label">Title:</label>
       <input
         type="text"
         class="form-control"
-        id="email"
+        id="edit_file_title"
         placeholder="Title"
-        name="email"
+        name="edit_file_title"
       />
     </div>
     <div class="mb-3">
-      <!-- <label for="pwd" class="form-label">Password:</label> -->
+      <label for="file" class="form-label">File:</label>
       <input
         type="file"
         class="form-control"
-        id="pwd"
+        id="file"
         placeholder="File"
-        name="pswd"
+        name="file"
       />
+      <input type="text" hidden value="" name="id" id="edit-material-id"/>
     </div>
-    <button type="submit" class="btn btn-primary">Add</button>
-  </form>
+  
+
+
+      <!-- Edit footer -->
+      <div class="modal-footer">
+        <div class="d-flex ml-auto">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>        </form>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<div>
-  <h3>Links</h3>
-  <ul>
-    <li>x</li>
-    <li>x</li>
-    <li>x</li>
-  </ul>
-  <form action="/links" method="POST" class="w-25">
+<!-- Link modal -->
+<!-- 
+
+  
+
+ -->
+<div class="modal" id="editlink">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Edit Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Link</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Edit body -->
+      <div class="modal-body">
+        <form
+    action="/link/edit"
+    method="POST"
+    class="w-75"
+  >
     <div class="mb-3 mt-3">
-      <!-- <label for="email" class="form-label">Email:</label> -->
+      <label for="edit_title" class="form-label">Title:</label>
       <input
         type="text"
         class="form-control"
-        id="email"
+        id="edit_title"
         placeholder="Title"
-        name="email"
+        name="edit_title"
       />
     </div>
     <div class="mb-3">
-      <!-- <label for="pwd" class="form-label">Password:</label> -->
+      <label for="edit_link" class="form-label">Link:</label>
       <input
         type="url"
         class="form-control"
-        id="pwd"
+        id="edit_link"
         placeholder="Link"
-        name="pswd"
+        name="edit_link" value=""
       />
     </div>
-    <button type="submit" class="btn btn-primary">Add</button>
-  </form>
+    <input type="text" hidden name="id" id="edit-link-id" value=""/>
+
+
+      <!-- Edit footer -->
+      <div class="modal-footer">
+        <div class="d-flex ml-auto">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Edit account -->
+<!-- 
+
+
+
+ -->
+ <div class="modal" id="edit">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Edit Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Profile</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Edit body -->
+      <div class="modal-body">
+        <form
+    action="/edit"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div class="mb-3 mt-3">
+      <label for="name" class="form-label">Name:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        placeholder="Name"
+        name="name"
+        value="{{user.name}}"
+
+      />
+    </div>
+    <div class="mb-3 mt-3">
+      <label for="email" class="form-label">Email:</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        placeholder="Email"
+        name="email"
+        value="{{user.email}}"
+
+      />
+    </div>
+    <div class="mb-3 mt-3">
+      <label for="username" class="form-label">Username:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        placeholder="Username"
+        name="username"
+        value="{{user.username}}"
+      />
+    </div>
+    </div>
+
+
+
+      <!-- Edit footer -->
+      <div class="modal-footer">
+        <div class="d-flex ml-auto">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>        </div>
+
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>        </form>
+      </div>
+
+    </div>
+  </div>
 </div>
 {% endblock %}
+{% block script2 %}
+<script>
+  var links =  {{links }} ; // Assuming the materials array is passed from the backend
+  var materials = {{materials }} ; // Assuming the materials array is passed from the backend
+var editButtons = document.querySelectorAll('[data-bs-target="#editmaterial"]');
+editButtons.forEach(function(button) {
+  button.addEventListener('click', function() {
+      var itemId = button.getAttribute('data-item-id');
+      var editMaterialIdInput = document.getElementById('edit-material-id');
+      editMaterialIdInput.value = itemId;
+      var material = materials.find(function(item) {
+          return item.id === itemId;
+      });
+
+      if (material) {
+          // Set the current values in the input fields
+          document.getElementById('edit_file_title').value = material.title;
+      }
+  });
+});
+
+var editButtons = document.querySelectorAll('[data-bs-target="#editlink"]');
+editButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        var itemId = button.getAttribute('data-item-id');
+        var editLinkIdInput = document.getElementById('edit-link-id');
+        editLinkIdInput.value = itemId;
+        var link = links.find(function(item) {
+              return item.id === itemId;
+          });
+
+          if (link) {
+              // Set the current values in the input fields
+              document.getElementById('edit_link').value = link.link;
+              document.getElementById('edit_title').value = link.title;
+          }
+    });
+});
+</script>
+{% endblock %}
+<!-- delete and edit icon -->
+<!-- edit and delte modals -->

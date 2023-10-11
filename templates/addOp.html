@@ -1,192 +1,187 @@
 {% extends "layout.html" %} {% block title %} Add new item {% endblock %} {%
 block content %}
 <div class="w-50 m-auto">
-  <form>
+  <h3 class="my-3">Add new opportunity</h3>
+  <form action="/add" method="POST">
     <div class="mb-3 mt-3">
-      <label for="email" class="form-label">Title:</label>
+      <label for="title" class="form-label">Title:</label>
       <input
         type="text"
         class="form-control"
-        id="email"
+        id="title"
         placeholder="Enter title"
-        name="email"
+        name="title"
+        required
       />
     </div>
     <div class="mb-3">
-      <label for="pwd" class="form-label">Organization Name:</label>
+      <label for="org_name" class="form-label">Organization Name:</label>
       <input
         type="text"
         class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
+        id="org_name"
+        placeholder="Enter Organization Name"
+        name="org_name"
+        required
       />
     </div>
     <div class="mb-3">
-      <label for="pwd" class="form-label">Application Deadline:</label>
-      <input
-        type="date"
-        class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="pwd" class="form-label">Personal Deadline:</label>
-      <input
-        type="date"
-        class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="pwd" class="form-label">Link:</label>
+      <label for="link" class="form-label">Link:</label>
       <input
         type="url"
         class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
+        id="link"
+        placeholder="Enter Link"
+        name="link"
       />
     </div>
     <div class="mb-3">
-      <label for="pwd" class="form-label">Organization Name:</label>
-      <input
-        type="text"
+      <label for="category" class="form-label">Category:</label>
+      <select
         class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
+        id="category"
+        placeholder="Enter Category"
+        name="category"
+      >
+        <option selected disabled>Select</option>
+        <option value="Internship">Internship</option>
+        <option value="Job">Job</option>
+        <option value="Scholarship/ Grant">Scholarship/ Grant</option>
+        <option value="College/ Postgrad">College/ Postgrad</option>
+        <option value="Skill Training">Skill Training</option>
+        <option value="Research/ Fellowship">Research/ Fellowship</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="status" class="form-label">Status:</label>
+      <select
+        class="form-control"
+        id="status"
+        placeholder="Enter status"
+        name="status"
+      >
+        <option selected disabled>Select</option>
+        <option value="Applied">Applied</option>
+        <option value="In progress">In progress</option>
+        <option value="Haven't Started">Haven't Started</option>
+        <option value="Not Opened">Not Opened</option>
+        <option value="Got Decision">Got Decision</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="app_deadline" class="form-label">Application Deadline:</label>
+      <input
+        type="date"
+        class="form-control"
+        id="app_deadline"
+        placeholder="Application Deadline:"
+        name="app_deadline"
       />
     </div>
 
     <div class="mb-3">
-      <label for="pwd" class="form-label">Short Description:</label>
-      <textarea
-        class="form-control"
-        rows="3"
-        id="comment"
-        name="text"
-      ></textarea>
-    </div>
-    <div class="mb-3">
-      <label for="pwd" class="form-label">Requirements:</label>
-      <textarea
-        class="form-control"
-        rows="3"
-        id="comment"
-        name="text"
-      ></textarea>
-    </div>
-    <div class="mb-3">
-      <label for="pwd" class="form-label">Category:</label>
-      <select
-        class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
+      <label for="personal_deadline" class="form-label"
+        >Personal Deadline:</label
       >
-        <option value="">Internship</option>
-        <option value="">Job</option>
-        <option value="">Scholarship/ Grant</option>
-        <option value="">College/ Postgrad</option>
-        <option value="">Skill Training</option>
-        <option value="">Research/ Fellowship</option>
-        <option value="">Other</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="pwd" class="form-label">Status:</label>
-      <select
+      <input
+        type="date"
         class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
-      >
-        <option value="">Applied</option>
-        <option value="">In progress</option>
-        <option value="">Haven't Started</option>
-        <option value="">Not Opened</option>
-        <option value="">Got Decision</option>
-      </select>
+        id="personal_deadline"
+        placeholder="Enter Personal Deadline"
+        name="personal_deadline"
+      />
     </div>
+
     <div class="mb-3">
-      <label for="pwd" class="form-label">Notes:</label>
+      <label for="short_description" class="form-label"
+        >Short Description:</label
+      >
       <textarea
         class="form-control"
         rows="3"
-        id="comment"
-        name="text"
+        id="short_description"
+        name="short_description"
       ></textarea>
     </div>
     <div class="mb-3">
-      <label for="pwd" class="form-label"
+      <label for="requirements" class="form-label">Requirements:</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        id="requirements"
+        name="requirements"
+      ></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="tasks" class="form-label"
         >Tasks: (comma separated Example: research, prepare docs, apply)</label
       >
       <textarea
         class="form-control"
         rows="3"
         id="comment"
-        name="text"
+        name="tasks"
       ></textarea>
     </div>
     <div class="mb-3">
-      <label for="pwd" class="form-label"
+      <label for="priority" class="form-label">Priority Rating: 1 - 5</label>
+      <input
+        min="1"
+        max="5"
+        type="number"
+        class="form-control"
+        id="priority"
+        placeholder="Enter priority (1 being lowest, 5 being highest)"
+        name="priority"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="contact_info" class="form-label">Contact Information:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="contact_info"
+        placeholder="Enter Contact Information"
+        name="contact_info"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location: </label>
+      <input
+        type="text"
+        class="form-control"
+        id="location"
+        placeholder="Enter location"
+        name="location"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="notes" class="form-label">Notes:</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        id="notes"
+        name="notes"
+      ></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="other_info" class="form-label"
         >Other info: (comma separated as key: value pairs Example: payment: 30$
         per hour, duration: 3 months)</label
       >
       <textarea
         class="form-control"
         rows="3"
-        id="comment"
-        name="text"
+        id="other_info"
+        name="other_info"
       ></textarea>
     </div>
-    <div class="mb-3">
-      <label for="pwd" class="form-label">Contact Info:</label>
-      <input
-        type="text"
-        class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
-      />
+    <div class="d-flex mx-auto">
+      <button type="submit" class="btn btn-primary">Submit</button>
     </div>
-    <div class="mb-3">
-      <label for="pwd" class="form-label">Location: </label>
-      <input
-        type="text"
-        class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="pwd" class="form-label"
-        >Priority Rating: 1 - 5, 1 being lowest, 5 being highest</label
-      >
-      <input
-        min="1"
-        max="5"
-        type="number"
-        class="form-control"
-        id="pwd"
-        placeholder="Enter password"
-        name="pswd"
-      />
-    </div>
-
-    <div class="form-check mb-3">
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" name="remember" />
-        Remember me
-      </label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
 {% endblock %}

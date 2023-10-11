@@ -1,43 +1,47 @@
 {% extends "layout.html" %} {% block title %} Tasks {% endblock %} {% block
-content %}
-<form>
-  <select name="filter">
-    <option selected disabled>Filter by</option>
-    <option value="personal Deadline">Personal Deadline</option>
-    <option value="Deadline">Application Deadline</option>
-    <option value="created_at">Date Added</option>
-    <option value="Deadline">Deadline</option>
-  </select>
-  <select name="sort">
-    <option selected disabled>Sort by</option>
-    <option value="personal Deadline">Personal Deadline</option>
-    <option value="Deadline">Application Deadline</option>
-    <option value="created_at">Date Added</option>
-    <option value="Deadline">Deadline</option>
-  </select>
-  <input type="submit" value="View changes" />
-</form>
-<table class="table table-borderless">
-  <thead>
-    <tr>
-      <th>Status</th>
-      <th>Title</th>
-      <th>Description</th>
-      <!-- link/ contact info, result link -->
-    </tr>
-  </thead>
-  <tbody>
-    <!-- on click individual item route (/<>) -->
-    <tr>
-      <td>Done</td>
-      <td>Software Engineering Intern</td>
-      <td>Research</td>
-    </tr>
-    <tr>
-      <td>Done</td>
-      <td>Software Engineering Intern</td>
-      <td>Apply</td>
-    </tr>
-  </tbody>
-</table>
-{% endblock %}
+script %}
+<script>
+  function redirectTo(opp_id) {
+    window.location.href = "/view/" + opp_id;
+  }
+</script>
+{% endblock %} {% block content %}
+<div class="m-4 w-75 mx-auto">
+  <div class="row">
+    <div class="col-lg-3 col-4">
+        <form action="/tasks" method="POST">
+          <select name="filter" class="form-control mr-1">
+            <option selected disabled>Filter by</option>
+            <option value="done">Done</option>
+            <option value="not done">Not Done</option>
+            <option value="all">Display All</option>
+          </select>
+        </div>
+        <div class="col-lg-3 col-4">
+          <input class="btn btn-info" type="submit" value="View changes" />
+        </form>
+      </div>
+    </div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Title</th>
+              <th>Description</th>
+              <!-- link/ contact info, result link -->
+            </tr>
+          </thead>
+          <tbody>
+            <!-- on click individual item route (/<>) -->
+            {% for task in tasks %}
+            <tr class="clickable" onclick="redirectTo('{{task.opp_id}}')">
+              <td class="bg-secondary">{{task.status}}</td>
+              <td>{{task.title}}</td>
+              <td>{{task.description}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endblock %}
+

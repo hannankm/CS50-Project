@@ -2,6 +2,7 @@
 script%}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 <script>
+  var events = {{ events | safe }};
   document.addEventListener("DOMContentLoaded", function () {
     var calendarEl = document.getElementById("calendar");
     var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -11,27 +12,23 @@ script%}
         center: "title",
         right: "dayGridMonth,timeGridWeek,timeGridDay",
       },
-      events: [
-        {
-          title: "All Day Event",
-          start: "2023-09-01",
-          color: "red",
-        },
-        {
-          title: "Meeting",
-          start: "2023-09-12",
-          color: "blue",
-        },
-      ],
+      events: events,
       eventColor: "backgroundColor",
+      eventMouseEnter: function (arg) {
+        var title = arg.event.title;
+        arg.el.setAttribute('title', title);
+      },
     });
     calendar.render();
+    // Initialize Bootstrap tooltips
+
   });
 </script>
 {% endblock %} {% block content %}
-<h3>Calendar</h3>
+<h3 class="m-5">Calendar</h3>
+<div class="mx-4 my-4" id="calendar"></div>
 <h6>Key</h6>
-<table class="table table-borderless">
+<table class="table table-borderless my-4">
   <tr>
     <td>Red</td>
     <td>Application Deadline</td>
@@ -41,5 +38,4 @@ script%}
     <td>Personal Deadline</td>
   </tr>
 </table>
-<div class="w-75 mx-auto my-4" id="calendar"></div>
 {% endblock %}

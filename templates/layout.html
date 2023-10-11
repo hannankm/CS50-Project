@@ -23,8 +23,13 @@
     {% block script %} {% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+    <nav class="navbar navbar-expand-sm bg-light navbar-light sticky-top">
       <div class="container-fluid">
+        <a class="navbar-brand" href="/">A</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
           {% if session["user_id"] %}
           <li class="nav-item">
@@ -68,6 +73,7 @@
           {% endif %}
         </ul>
       </div>
+      </div>
     </nav>
     <!-- The Modal -->
     <div class="modal" id="myModal">
@@ -108,6 +114,10 @@
         </div>
       </div>
     </div>
-    {% block content %} {% endblock %}
+    <div class="mt-8">
+       {% block content %} {% endblock %}
+    </div>
+    {% block script2 %}
+    {% endblock %}
   </body>
 </html>

@@ -1,43 +1,35 @@
 {% extends "layout.html" %} {% block title %} History {% endblock %} {% block
-content %}
-<form>
-  <select name="filter">
-    <option selected disabled>Filter by</option>
-    <option value="personal Deadline">Personal Deadline</option>
-    <option value="Deadline">Application Deadline</option>
-    <option value="created_at">Date Added</option>
-    <option value="Deadline">Deadline</option>
-  </select>
-  <select name="sort">
-    <option selected disabled>Sort by</option>
-    <option value="personal Deadline">Personal Deadline</option>
-    <option value="Deadline">Application Deadline</option>
-    <option value="created_at">Date Added</option>
-    <option value="Deadline">Deadline</option>
-  </select>
-  <input type="submit" value="View changes" />
-</form>
-<table class="table" border="1">
-  <thead>
-    <tr>
-      <th>Application Date</th>
-      <th>Title</th>
-      <th>Organization Name</th>
-      <!-- link/ contact info, result link -->
-    </tr>
-  </thead>
-  <tbody>
-    <!-- on click individual item route (/<>) -->
-    <tr>
-      <td>02/ 09/ 23</td>
-      <td>Software Engineering Intern</td>
-      <td>Google</td>
-    </tr>
-    <tr>
-      <td>02/ 09/ 23</td>
-      <td>Software Engineering Intern</td>
-      <td>Google</td>
-    </tr>
-  </tbody>
-</table>
+script %}
+<script>
+  function redirectTo(opp_id) {
+    window.location.href = "/view/" + opp_id;
+  }
+</script>
+{% endblock %} {% block content %}
+<h3 class="m-5">Application History</h3>
+<div class="w-75 mx-auto my-8">
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Application Date</th>
+        <th>Title</th>
+        <th>Organization Name</th>
+        <!-- <th>Link</th> -->
+
+        <!-- link/ contact info, result link -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- on click individual item route (/<>) -->
+      {% for app in apps %}
+      <tr class="clickable" onclick="redirectTo('{{app.opp_id}}')">
+        <td>{{app.application_date}}</td>
+        <td>{{app.title}}</td>
+        <td>{{app.org_name}}</td>
+        <!-- <td><a href="{{app.link}}">Link</a></td> -->
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
